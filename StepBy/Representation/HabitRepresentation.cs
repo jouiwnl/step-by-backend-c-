@@ -67,5 +67,35 @@ namespace StepBy.Representation
                 };
             }
         }
+
+        public class CreateUpdateRepresentation
+        {
+            public String id { get; set; }
+            public String title { get; set; }
+            public DateTime created_at { get; set; }
+            public String user_id { get; set; }
+
+            public List<int> weekDays { get; set; }
+
+            public static Habit of(CreateUpdateRepresentation habit)
+            {
+                String newId = Guid.NewGuid().ToString();
+
+                return new Habit
+                {
+                    id = habit.id != null ? habit.id : newId,
+                    title = habit.title,
+                    created_at = habit.created_at,
+                    user_id = habit.user_id,
+                    weekDays = habit.weekDays.ConvertAll(w => 
+                        new HabitWeekDays
+                        {
+                            habit_id = newId,
+                            week_day = w
+                        }
+                    )
+                };
+            }
+        }
     }
 }
